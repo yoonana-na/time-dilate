@@ -1,0 +1,58 @@
+import math
+
+# Constants
+C = 299792458  # Speed of light in m/s
+G = 6.67430e-11  # Gravitational constant in m^3/kg/s^2
+
+def special_relativity_time_dilation(proper_time, velocity):
+    """
+    Calculate time dilation due to special relativity.
+    proper_time: time interval measured by an observer at rest (seconds)
+    velocity: velocity of moving observer (m/s)
+    Returns: dilated time interval (seconds)
+    """
+    beta = velocity / C
+    if abs(beta) >= 1:
+        raise ValueError("Velocity must be less than the speed of light.")
+    gamma = 1 / math.sqrt(1 - beta**2)
+    return proper_time * gamma
+
+def general_relativity_time_dilation(proper_time, mass, radius):
+    """
+    Calculate gravitational time dilation near a non-rotating sphere (Schwarzschild metric).
+    proper_time: time interval measured far from the mass (seconds)
+    mass: mass of the object (kg)
+    radius: distance from the center of the mass (m)
+    Returns: dilated time interval (seconds)
+    """
+    rs = 2 * G * mass / C**2
+    if radius <= rs:
+        raise ValueError("Radius must be greater than the Schwarzschild radius.")
+    factor = math.sqrt(1 - rs / radius)
+    return proper_time * factor
+
+if __name__ == "__main__":
+    print("Time Dilation Calculator")
+    print("1. Special Relativity (velocity-based)")
+    print("2. General Relativity (gravity-based)")
+    choice = input("Choose calculation (1 or 2): ")
+
+    if choice == "1":
+        t = float(input("Enter proper time interval (seconds): "))
+        v = float(input("Enter velocity (m/s): "))
+        try:
+            dilated_time = special_relativity_time_dilation(t, v)
+            print(f"Dilated time: {dilated_time} seconds")
+        except ValueError as e:
+            print("Error:", e)
+    elif choice == "2":
+        t = float(input("Enter proper time interval (seconds): "))
+        M = float(input("Enter mass of object (kg): "))
+        r = float(input("Enter distance from center of mass (m): "))
+        try:
+            dilated_time = general_relativity_time_dilation(t, M, r)
+            print(f"Dilated time experienced: {dilated_time} seconds")
+        except ValueError as e:
+            print("Error:", e)
+    else:
+        print("Invalid choice.")
